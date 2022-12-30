@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "Roboto-regular";
+  src: url(".//../assets/fonts/Roboto-Regular.ttf") format("ttf2"),
+  url(".//../assets/fonts/Roboto-Regular.ttf") format("ttf2");
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    background: linear-gradient(90deg, #46a6e6, #5ef3d5, #f3d3d8);
+    font-family: "Roboto-regular";
+  }
+  

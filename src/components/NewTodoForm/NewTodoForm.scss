@@ -1,0 +1,47 @@
+.newTodoForm {
+    margin-top: 20%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .newTodoForm label {
+    min-width: 100%;
+    margin-bottom: 2%;
+    font-size: 26px;
+  }
+  
+  .newTodoForm input {
+    flex-grow: 1;
+    border: none;
+    background: #a8d5f3;
+    padding-left: 10px;
+    color: #533d3d;
+    border-radius: 6px;
+  }
+  
+  .newTodoForm button {
+    border: none;
+    background: #a8d5f3;
+    color: #533d3d;
+    width: 20%;
+    border-radius: 6px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  
+  .newTodoForm button:hover {
+    background: #1675e2;
+  }
+  
+  .newTodoForm input, button {
+    height: 50px;
+  }
+  
+  .btn-filter {
+    margin-top: 5%;
+    margin-right: 10px;
+    height: 40px;
+    width: auto;
+    border-radius: 6px;
+    background: rgb(37, 80, 80);
+  }
