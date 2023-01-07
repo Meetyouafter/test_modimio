@@ -1,15 +1,27 @@
-# 🚀 Welcome to your new awesome project!
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:airbnb-base",
+        "plugin:react/recommended"
+    ],
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "react/require-default-props": "off",
+        "react/function-component-definition": [2, {
+          "namedComponents": "arrow-function"
+        }],
+        "arrow-parens": ["error", "as-needed"]
+      }
+}
 
-This project has been created using **webpack-cli**, you can now run
-
-```
-npm run build
-```
-
-or
-
-```
-yarn build
-```
-
-to bundle your application

@@ -1,64 +1,103 @@
-/* eslint-disable no-undef */
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV == "production";
+const isProd = process.env.NODE_ENV === 'production';
+const isDev = !isProd;
 
-const stylesHandler = isProduction
-  ? MiniCssExtractPlugin.loader
-  : "style-loader";
+const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
-const config = {
-  entry: "./src/index.jsx",
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    clean: true,
+const optimization = () => {
+  const config = {
+    minimize: true,
+    splitChunks: {
+      chunks: 'all',
+    },
+  };
+  if (isProd) {
+    config.minimizer = [
+      new TerserWebpackPlugin(),
+      new MiniCssExtractPlugin(),
+    ];
+  }
+  return config;
+};
+
+module.exports = {
+  context: path.resolve(__dirname, 'src'),
+  mode: 'development',
+  target: 'web',
+  entry: './index.jsx',
+  devtool: isDev ? 'source-map' : 'eval-source-map',
+  resolve: {
+    extensions: ['js', 'jsx'],
   },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: filename('js'),
+    clean: true,
+    publicPath: '/',
+  },
+  optimization: optimization(),
   devServer: {
-    open: true,
-    host: "localhost",
-    static: path.resolve(__dirname, 'dist'),
+    static: './dist',
+    hot: isDev,
     port: 8080,
-    hot: true,
+    open: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      title: 'Output Management',
+      template: 'index.html',
+      minify: {
+        collapseWhitespace: isProd,
+      },
+    }),
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
     }),
   ],
-  performance : {
-    hints : false
-  },  
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/i,
-        loader: "babel-loader",
+        test: /\.s?css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'scoped-css-loader', 'sass-loader'],
       },
       {
-        test: /\.css$/i,
-        use: [stylesHandler, "css-loader"],
+        test: /\.js|jsx$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
       },
       {
-        test: /\.s[ac]ss$/i,
-        use: [stylesHandler, "css-loader", "sass-loader"],
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/images/[name].[ext]',
+        },
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[name].[ext]',
+        },
+      },
+      {
+        test: /\.[jt]sx?$/,
+        exclude: /node_modules/, // не нужно компилировать
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              [
+                '@babel/preset-react',
+              ],
+            ],
+          },
+        },
       },
     ],
   },
-};
-
-module.exports = () => {
-  if (isProduction) {
-    config.mode = "production";
-
-    config.plugins.push(new MiniCssExtractPlugin());
-  } else {
-    config.mode = "development";
-  }
-  return config;
 };

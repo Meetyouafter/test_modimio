@@ -1,46 +1,31 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import trashIcon from '../../../assets/images/trash.svg';
-import editIcon from '../../../assets/images/pencil.svg';
-import './Todo.scss';
+import { completeTodoAction, removeTodoAction } from '../../store/todoReducer';
+import './style.scss';
 
-function Todo({ todo, remove, update, toggleComplete }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [task, setTask] = useState(todo.task);
+function Todo({ todo }) {
+  const dispatch = useDispatch();
 
-  const handleUpdate = e => {
-    e.preventDefault();
-    update(todo.id, task);
-    setIsEditing(!isEditing);
-  };
+  const removeTodo = (id) => dispatch(removeTodoAction(id));
 
-  let result;
-  if (isEditing) {
-    result = (
-      <div className="Todo">
-        <form className="Todo-edit-form" onSubmit={handleUpdate}>
-          <input onChange={e => setTask(e.target.value)} value={task} type="text" />
-          <button>Save</button>
-        </form>
+  const completeTodo = (id) => dispatch(completeTodoAction(id));
+
+  return (
+    <div className="Todo">
+      <li
+        id={todo.id}
+        onClick={(e) => completeTodo(e.target.id)}
+        className={todo.completed ? 'Todo-task completed' : 'Todo-task'}
+      >
+        {todo.task}
+      </li>
+      <div className="Todo-buttons">
+        <img src={trashIcon} alt="remove todo" onClick={(e) => removeTodo(e.target.id)} id={todo.id} />
       </div>
-    );
-  } else {
-    result = (
-      <div className="Todo">
-        <li
-          id={todo.id}
-          onClick={e => toggleComplete(e.target.id)}
-          className={todo.completed ? "Todo-task completed" : "Todo-task"}
-        >
-          {todo.task}
-        </li>
-        <div className="Todo-buttons">
-        <img src={editIcon} onClick={() => setIsEditing(!isEditing)} />
-        <img src={trashIcon} onClick={e => remove(e.target.id)} id={todo.id}/>
-        </div>
-      </div>
-    );
-  }
-  return result;
+    </div>
+  );
 }
 
 export default Todo;
