@@ -1,6 +1,10 @@
-import { createStore } from "redux";
-import rootReducer from './reducers';
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from './counterSlice'
+import todoReducer from "./todoSlice";
 
-const store = createStore(rootReducer);
-
-export default store;
+export default configureStore({
+    reducer: {
+        counter: counterReducer,
+        todo: todoReducer,
+    }
+});
