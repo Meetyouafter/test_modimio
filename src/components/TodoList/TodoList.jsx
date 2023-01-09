@@ -29,10 +29,7 @@ function TodoList() {
       </h1>
       <ul>
         {filteredTodos.map((todo) => (
-          <Todo
-            key={todo.id}
-            todo={todo}
-          />
+          <Todo key={todo.id} todo={todo} />
         ))}
       </ul>
       <NewTodoForm todoFilter={todoFilter} />

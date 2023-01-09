@@ -1,4 +1,3 @@
-/* eslint-disable default-param-last */
 import { ADD_TODO, REMOVE_TODO, COMPLETE_TODO } from './types';
 
 const initialState = {
