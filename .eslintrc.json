@@ -14,5 +14,8 @@
         "react"
     ],
     "rules": {
+        "react/prop-types": "off",
+        "no-noninteractive-element-interactions": "off",
+        "click-events-have-key-events": "off"
     }
 }

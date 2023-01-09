@@ -19,17 +19,14 @@ input {
   border-radius: 6px;
 }
 
-button {
+.btn-add {
   border: none;
-  background: #a8d5f3;
-  color: #533d3d;
-  width: 20%;
   border-radius: 6px;
   margin-left: 5px;
   cursor: pointer;
 }
 
-button:hover {
+.btn-add:hover {
   background: #1675e2;
 }
 

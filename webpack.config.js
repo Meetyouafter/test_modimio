@@ -2,24 +2,22 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = !isProd;
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
+const filename = ext => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
 const optimization = () => {
   const config = {
-    minimize: true,
+  //  minimize: true,
     splitChunks: {
       chunks: 'all',
     },
   };
   if (isProd) {
-    config.minimizer = [
-      new TerserWebpackPlugin(),
-      new MiniCssExtractPlugin(),
-    ];
+    config.minimize = [new TerserWebpackPlugin(), new MiniCssExtractPlugin()];
   }
   return config;
 };
@@ -31,7 +29,7 @@ module.exports = {
   entry: './index.jsx',
   devtool: isDev ? 'source-map' : 'eval-source-map',
   resolve: {
-    extensions: ['js', 'jsx'],
+    extensions: ['.js', '.jsx', '.png', '.jpg'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -45,6 +43,7 @@ module.exports = {
     hot: isDev,
     port: 8080,
     open: true,
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -57,13 +56,10 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: filename('css'),
     }),
+    new NodePolyfillPlugin(),
   ],
   module: {
     rules: [
-      {
-        test: /\.s?css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'scoped-css-loader', 'sass-loader'],
-      },
       {
         test: /\.js|jsx$/,
         enforce: 'pre',
@@ -88,15 +84,26 @@ module.exports = {
         exclude: /node_modules/, // не нужно компилировать
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              [
-                '@babel/preset-react',
-              ],
-            ],
-          },
         },
+      },
+      {
+        test: /\.(sc|c|sa)ss$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              importLoaders: 2,
+            },
+          },
+          { loader: 'scoped-css-loader' },
+          {
+            loader: 'sass-loader',
+          },
+        ],
       },
     ],
   },

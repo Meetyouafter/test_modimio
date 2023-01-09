@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { addTodoAction } from '../../store/todoReducer';
 import './style.scss';
 
-function NewTodoForm() {
+function NewTodoForm({ todoFilter }) {
   const [todo, setTodo] = useState('');
   const dispatch = useDispatch();
 
@@ -19,8 +19,6 @@ function NewTodoForm() {
     setTodo('');
   };
 
-  const todoFilter = () => true;
-
   return (
     <>
       <form className="newTodoForm" onSubmit={addNewTodo}>
@@ -33,7 +31,7 @@ function NewTodoForm() {
           name="task"
           placeholder="Write your todo here"
         />
-        <button type="submit">Add new todo</button>
+        <button className="btn btn-primary btn-add" type="submit">Add new todo</button>
       </form>
       <button
         type="button"

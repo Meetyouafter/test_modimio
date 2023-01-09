@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import trashIcon from '../../../assets/images/trash.svg';
@@ -9,7 +8,6 @@ function Todo({ todo }) {
   const dispatch = useDispatch();
 
   const removeTodo = (id) => dispatch(removeTodoAction(id));
-
   const completeTodo = (id) => dispatch(completeTodoAction(id));
 
   return (
