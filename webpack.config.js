@@ -11,13 +11,13 @@ const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
 const optimization = () => {
   const config = {
-  //  minimize: true,
+    minimize: false,
     splitChunks: {
       chunks: 'all',
     },
   };
   if (isProd) {
-    config.minimize = [new TerserWebpackPlugin(), new MiniCssExtractPlugin()];
+    config.minimize = true;
   }
   return config;
 };
@@ -29,7 +29,7 @@ module.exports = {
   entry: './index.jsx',
   devtool: isDev ? 'source-map' : 'eval-source-map',
   resolve: {
-    extensions: ['.js', '.jsx', '.png', '.jpg'],
+    extensions: ['.js', '.jsx'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -81,7 +81,7 @@ module.exports = {
       },
       {
         test: /\.[jt]sx?$/,
-        exclude: /node_modules/, // не нужно компилировать
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
         },
