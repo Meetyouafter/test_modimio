@@ -28,7 +28,7 @@ function TodoList() {
         <span>Create a new tasks list</span>
       </h1>
       <ul>
-        {filteredTodos.map((todo) => (
+        {todos.map((todo) => (
           <Todo key={todo.id} todo={todo} />
         ))}
       </ul>

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import { addTodoAction } from '../../store/todoReducer';
+import { addTodoAction, filterTodo } from '../../store/todoReducer';
 import './style.scss';
 
 function NewTodoForm({ todoFilter }) {
   const [todo, setTodo] = useState('');
   const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos);
 
   const addNewTodo = (e) => {
     e.preventDefault();
@@ -19,40 +20,53 @@ function NewTodoForm({ todoFilter }) {
     setTodo('');
   };
 
+  const allTodoCounter = todos.length;
+
+  const completeTodoCounter = todos.reduce((acc, el) => {
+    if (el.completed) acc += 1;
+    return acc;
+  }, 0);
+
+  const activeTodoCounter = todos.reduce((acc, el) => {
+    if (!el.completed) acc += 1;
+    return acc;
+  }, 0);
+
   return (
     <>
       <form className="newTodoForm" onSubmit={addNewTodo}>
         <input
           value={todo}
           required
+          maxLength={30}
           onChange={(e) => setTodo(e.target.value)}
           id="task"
           type="text"
           name="task"
-          placeholder="Write your todo here"
+          placeholder="Write your todo here (not more 30 symbols)"
         />
         <button className="btn btn-primary btn-add" type="submit">Add new todo</button>
       </form>
       <button
         type="button"
         className="btn btn-primary btn-filter"
-        onClick={() => todoFilter(false)}
-      >
-        Active
-      </button>
-      <button
-        type="button"
-        className="btn btn-primary btn-filter"
-        onClick={() => todoFilter(true)}
-      >
-        Complete
-      </button>
-      <button
-        type="button"
-        className="btn btn-primary btn-filter"
         onClick={() => todoFilter('all')}
       >
-        All
+        {`All tasks (${allTodoCounter})`}
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary btn-filter"
+        onClick={() => todoFilter(false)}
+      >
+        {`Active tasks (${activeTodoCounter})`}
+      </button>
+      <button
+        type="button"
+        className="btn btn-primary btn-filter"
+        onClick={() => dispatch(filterTodo(true))}
+      >
+        {`Completed tasks (${completeTodoCounter})`}
       </button>
     </>
   );
